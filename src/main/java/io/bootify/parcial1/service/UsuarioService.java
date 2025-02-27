@@ -87,6 +87,8 @@ public class UsuarioService {
         return usuarioRepository.existsByEmailIgnoreCase(email);
     }
 
+    //hola a todos los que estan viendo esto
+
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
