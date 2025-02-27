@@ -11,6 +11,8 @@ import io.bootify.parcial1.repos.PagoRepository;
 import io.bootify.parcial1.repos.UsuarioRepository;
 import io.bootify.parcial1.util.NotFoundException;
 import io.bootify.parcial1.util.ReferencedWarning;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class UsuarioService {
     private final ObraRepository obraRepository;
     private final OfertaRepository ofertaRepository;
     private final PagoRepository pagoRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
             final ObraRepository obraRepository, final OfertaRepository ofertaRepository,
@@ -49,8 +52,10 @@ public class UsuarioService {
     public Long create(final UsuarioDTO usuarioDTO) {
         final Usuario usuario = new Usuario();
         mapToEntity(usuarioDTO, usuario);
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario).getId();
     }
+    
 
     public void update(final Long id, final UsuarioDTO usuarioDTO) {
         final Usuario usuario = usuarioRepository.findById(id)
