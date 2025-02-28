@@ -66,7 +66,7 @@ public class UsuarioService {
             throw new IllegalArgumentException("Credenciales incorrectas");
         }
     
-        return new LoginResponseDTO(usuario.getId(), usuario.getNombre());
+        return new LoginResponseDTO(usuario.getId(), usuario.getNombre(), usuario.getEmail());
     }
 
     public void update(final Long id, final UsuarioDTO usuarioDTO) {
