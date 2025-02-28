@@ -1,5 +1,7 @@
 package io.bootify.parcial1.rest;
 
+import io.bootify.parcial1.model.LoginRequestDTO;
+import io.bootify.parcial1.model.LoginResponseDTO;
 import io.bootify.parcial1.model.UsuarioDTO;
 import io.bootify.parcial1.service.UsuarioService;
 import io.bootify.parcial1.util.ReferencedException;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @RequestMapping(value = "/api/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,6 +44,11 @@ public class UsuarioResource {
     public ResponseEntity<Long> createUsuario(@RequestBody @Valid final UsuarioDTO usuarioDTO) {
         final Long createdId = usuarioService.create(usuarioDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO loginRequest) {
+        return ResponseEntity.ok(usuarioService.login(loginRequest));
     }
 
     @PutMapping("/{id}")

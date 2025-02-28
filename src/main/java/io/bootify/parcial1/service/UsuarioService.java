@@ -6,6 +6,8 @@ import io.bootify.parcial1.domain.Pago;
 import io.bootify.parcial1.domain.Usuario;
 import io.bootify.parcial1.model.UsuarioDTO;
 import io.bootify.parcial1.repos.ObraRepository;
+import io.bootify.parcial1.model.LoginRequestDTO;
+import io.bootify.parcial1.model.LoginResponseDTO;
 import io.bootify.parcial1.repos.OfertaRepository;
 import io.bootify.parcial1.repos.PagoRepository;
 import io.bootify.parcial1.repos.UsuarioRepository;
@@ -56,6 +58,16 @@ public class UsuarioService {
         return usuarioRepository.save(usuario).getId();
     }
     
+    public LoginResponseDTO login(LoginRequestDTO loginRequest) {
+        Usuario usuario = usuarioRepository.findByEmailIgnoreCase(loginRequest.getEmail())
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado"));
+    
+        if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPassword())) {
+            throw new IllegalArgumentException("Credenciales incorrectas");
+        }
+    
+        return new LoginResponseDTO(usuario.getId(), usuario.getNombre());
+    }
 
     public void update(final Long id, final UsuarioDTO usuarioDTO) {
         final Usuario usuario = usuarioRepository.findById(id)
